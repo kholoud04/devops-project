@@ -23,3 +23,19 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
+            sudo docker stop devops-container || true
+            sudo docker rm devops-container || true
+            sudo docker run -d --name devops-container -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
