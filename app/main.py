@@ -1,17 +1,3 @@
-'''
-from fastapi import FastAPI
-
-app = FastAPI(title="DevOps Demo App")
-
-@app.get("/")
-def read_root():
-    return {"status": "success", "message": "DevOps Pipeline is Working!", "version": "v1.0.0"}
-
-@app.get("/health")
-def health_check():
-    return {"status": "healthy"}
-'''
-
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
