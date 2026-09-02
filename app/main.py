@@ -140,7 +140,7 @@ def read_root():
             <br>
             <button class="btn-reset" onclick="resetCounter()">إعادة ضبط العداد</button>
 
-            <div class="footer-tag">Deployed via GitHub Actions & Docker</div>
+            <div class="footer-tag"> </div>
         </div>
 
         <script>
