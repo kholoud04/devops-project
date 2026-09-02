@@ -120,7 +120,7 @@ def read_root():
     </head>
     <body>
         <div class="card">
-            <h1>المسبحة الإلكترونية 1 📿</h1>
+            <h1>المسبحة الإلكترونية 📿</h1>
             
             <select id="dhikrSelect" onchange="resetCounter()">
                 <option value="سبحان الله">سبحان الله</option>
