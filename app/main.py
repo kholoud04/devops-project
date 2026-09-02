@@ -136,7 +136,7 @@ def read_root():
             </select>
 
             <div class="counter-box" id="counter">0</div>
-            <button class="btn-click" onclick="countUp()">تسبيح</button>
+            <button class="btn-click" onclick="countUp()"> </button>
             <br>
             <button class="btn-reset" onclick="resetCounter()">إعادة ضبط العداد</button>
 
