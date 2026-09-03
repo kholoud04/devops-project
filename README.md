@@ -2,43 +2,41 @@
 
 ## Project Overview
 
-This project showcases a complete DevOps lifecycle implementation, transforming a manual deployment process into an automated, reliable, and secure cloud delivery workflow.
+This project implements an end-to-end DevOps workflow delivering a containerized web application to Amazon Web Services (AWS). It focuses on core cloud engineering practices: Infrastructure as Code (IaC), automated testing, continuous integration and deployment (CI/CD), containerization, and reverse proxy networking.
+
 ---
-## Technical Implementations & Workflow
 
-### 1. Continuous Integration & Automated Testing
-* Implemented a multi-stage CI pipeline using **GitHub Actions** triggered automatically upon every commit to the main branch.
-* Integrated automated unit testing using **Pytest** to validate application health, routing logic, and HTTP endpoints before any build actions take place.
-* Configured workflow exit safeguards to stop the delivery lifecycle immediately if any test fails, preventing broken code from ever reaching the production environment.
+## Technical Implementations & Architecture
 
-### 2. Application Containerization
-* Packaged the application into an isolated **Docker** image using an optimized `Dockerfile`.
-* Eliminated environment inconsistencies between local development and cloud production hosts by encapsulating all dependencies, runtimes, and system configurations.
-* Enabled lightweight process management, allowing fast restart cycles and isolated resource allocation on the host machine.
+### 1. Infrastructure as Code (IaC) with Terraform
+* Provisioned cloud infrastructure on **AWS** declaratively using **Terraform**.
+* Automated the lifecycle of compute resources (**AWS EC2**) and firewall rules (**AWS Security Groups**), tracking infrastructure state via `terraform.tfstate`.
 
-### 3. Cloud Provisioning & Server Management
-* Provisioned an **AWS EC2** virtual compute instance running **Ubuntu Linux** as the dedicated hosting environment.
-* Configured Linux user permissions, environment variables, and SSH keys for secure non-interactive deployment operations.
-* Managed runtime container lifecycles on the remote server using headless shell commands executed securely from the CI/CD runner.
+### 2. Infrastructure Security & Network Hardening
+* Implemented the principle of least privilege using automated Security Groups to restrict inbound access strictly to port 80 (HTTP) and port 22 (SSH).
+* Blocked internal container ports (8000) from public exposure, ensuring the application is accessible solely through the reverse proxy.
+
+### 3. Application Containerization
+* Containerized the backend service using **Docker** to ensure complete environment consistency between local development and cloud production.
+* Handled environment variables, dependencies, and process isolation within a standardized container lifecycle.
 
 ### 4. Reverse Proxying & Traffic Routing
-* Deployed and configured **Nginx** as a reverse proxy on the host server to handle incoming public web traffic on port 80.
-* Designed the internal networking scheme so Nginx forwards inbound HTTP requests locally to the Docker container listening on port 8000.
-* Decoupled public traffic management from the application runtime, enhancing stability and preparing the architecture for seamless SSL/TLS integration.
+* Deployed and configured **Nginx** on the Ubuntu host as the primary ingress controller.
+* Intercepted incoming HTTP traffic on port 80 and securely routed requests internally to the Docker container listening on port 8000.
 
-### 5. Infrastructure Security & Network Hardening
-* Hardened network perimeter security by configuring strict **AWS Security Groups**.
-* Implemented the principle of least privilege by exposing only port 80 (HTTP) for public users and port 22 (SSH) for administrative management.
-* Completely blocked the application container's internal port (8000) from direct internet exposure, protecting internal endpoints against unauthorized external scanning.
+### 5. Continuous Integration & Continuous Deployment (CI/CD)
+* Built an automated **GitHub Actions** pipeline triggered on every commit to the repository.
+* Integrated automated unit testing using **Pytest** to validate API endpoints prior to deployment.
+* Executed automated zero-downtime updates on the EC2 host via encrypted SSH commands upon successful test runs.
 
 ---
 
 ## Tech Stack
 
-* **Cloud Platform:** AWS EC2, VPC Security Groups
-* **Automation & CI/CD:** GitHub Actions
+* **Infrastructure as Code (IaC):** Terraform
+* **Cloud Platform:** AWS (EC2, Security Groups)
+* **CI/CD Automation:** GitHub Actions
 * **Containerization:** Docker
 * **Web Server & Routing:** Nginx (Reverse Proxy)
-* **Testing:** Pytest
+* **Testing & Backend:** Pytest, Python, FastAPI
 * **Operating System & Scripting:** Ubuntu Linux, Bash
-* **Application Framework:** Python, FastAPI
